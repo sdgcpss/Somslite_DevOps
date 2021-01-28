@@ -90,7 +90,22 @@ spec:
 				else {
 				echo "no need"
 				}
+				
 				}
+				 sh '''
+		  server_list=`cat project.properties | grep "servers" | cut -d'=' -f2 `
+                      echo $server_list
+		      
+                      for server in $server_list
+                      
+                      do
+                      
+                      echo $server
+                      done
+                      
+                          
+                      
+                      '''
 				}			
 		  }
 		  }
@@ -101,6 +116,7 @@ spec:
                   sh "printenv | sort"
                   echo "BUILD_NUMBER = ${env.BUILD_NUMBER}"
                   echo "BRANCH_NAME = ${env.BRANCH_NAME}"
+		 
               }
           }
 	
