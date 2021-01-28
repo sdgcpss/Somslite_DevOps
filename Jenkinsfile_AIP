@@ -118,7 +118,7 @@ spec:
 	       
 	       //Boolean.TRUE.equals(propfile['feature_deploy'])
 	       
-	       if( Boolean.TRUE.equals(propfile['feature_deploy']) ){
+	       if ( propfile['feature_deploy'] == "true" ) {
 	       		echo "hi"
 	         withMaven(maven: 'MAVEN-3.6.3') {
 					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
