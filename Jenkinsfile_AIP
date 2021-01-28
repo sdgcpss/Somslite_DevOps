@@ -122,7 +122,7 @@ spec:
 	       		echo "hi"
 	         withMaven(maven: 'MAVEN-3.6.3') {
 					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
-					
+					sh 'mvn -X deploy:deploy-file -Dfile=$APP_NAME/target/sample-0.0.1-SNAPSHOT.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
 				} 
 				
 				
