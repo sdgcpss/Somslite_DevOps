@@ -70,7 +70,7 @@ spec:
 				}
 			}
 		}
-		stage ("Deploy") {
+		/* stage ("Deploy") {
               steps {
                   container ('gradle') {
                       sh '''
@@ -106,7 +106,22 @@ spec:
                       '''
 		           }
               }
-          }
+          } */
+	  
+	   stage ("Deploy") {
+              steps {
+                  container ('gradle') {
+                script {
+                   propfile = readProperties(file: './project.properties')
+		   println ("deploy:"+ propfile['feature_deploy'])
+               println ("reading properties ...")
+println ("branch_name:"+ propfile['feature_deploy']) 
+                   
+        
+		  }
+		  }
+		  }
+	  
           stage ("use env vars") {
               steps {
                   sh "printenv | sort"
