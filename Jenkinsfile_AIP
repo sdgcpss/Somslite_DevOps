@@ -54,7 +54,7 @@ spec:
 				}
 			}
 		
-		/* stage('Code Quality') {
+		stage('Code Quality') {
 			steps {
 				container('gradle') {
 					withMaven(maven: 'MAVEN-3.6.3') {
@@ -69,44 +69,8 @@ spec:
 					}
 				}
 			}
-		} */
-		/* stage ("Deploy") {
-              steps {
-                  container ('gradle') {
-                      sh '''
-                     
-                      deploy=`cat project.properties | grep "feature_deploy" | cut -d'=' -f2 | awk  '{print $1}' `
-                      
-                       
-                      if test "$deploy" = true
-                      then
-                          echo " im deploying"
-			  '''
-			  withMaven(maven: 'MAVEN-3.6.3') {
-					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
-					
-				}
-			  sh '''
-                          else 
-                      echo "no need"
-                      fi
-                      
-                      server_list=`cat project.properties | grep "servers" | cut -d'=' -f2 `
-                      echo $server_list
-		      
-                      for server in $server_list
-                      
-                      do
-                      
-                      echo $server
-                      done
-                      
-                          
-                      
-                      '''
-		           }
-              }
-          } */
+		} 
+		
 	  
 	   stage ("Deploy") {
               steps {
@@ -116,28 +80,18 @@ spec:
 		   println ("deploy:"+ propfile['feature_deploy'])
                println ("reading properties ...")
 	       
-	       //Boolean.TRUE.equals(propfile['feature_deploy'])
-	       
 	       if ( propfile['feature_deploy'] == "true" ) {
-	       		echo "hi"
-	         withMaven(maven: 'MAVEN-3.6.3') {
+	       		withMaven(maven: 'MAVEN-3.6.3') {
 					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
 					sh 'mvn -X deploy:deploy-file -Dfile=$APP_NAME/target/sample-0.0.1-SNAPSHOT.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
 				} 
-				
 				
 				} 
 				else {
 				echo "no need"
 				}
-				
-				
-            }
-                   
-	       
- 
-                   } 
-		 			
+				}
+				}			
 		  }
 		  }
 		  
@@ -149,31 +103,6 @@ spec:
                   echo "BRANCH_NAME = ${env.BRANCH_NAME}"
               }
           }
-	/*  stage('Publish Package') {
-		steps {
-			container('gradle') {
-				withMaven(maven: 'MAVEN-3.6.3') {
-					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
-					sh 'mvn -X deploy:deploy-file -Dfile=sample-java-app/target/sample-0.0.1-SNAPSHOT.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
-				}
-			}
-		}
-	} */
 	
-	
-	/* stage('Deploy Dev') {
-	when { branch 'dev'}
-	steps {
-	echo "I am executing Deploy the artifact from Archiva to target dev environment. My artifact has a unique name which is automatically generated and deployed to target dev environment"
-	echo "Work in progress"
-	}
-	}
-	stage('Smoke Test'){
-	when { branch 'dev'}
-	steps {
-	echo "I am executing Smoke Test on target dev environment post deployment"
-	echo 'Work in progress'
-	}
-	} */
 }
 }
