@@ -54,7 +54,7 @@ spec:
 				}
 			}
 		
-		stage('Code Quality') {
+		/* stage('Code Quality') {
 			steps {
 				container('gradle') {
 					withMaven(maven: 'MAVEN-3.6.3') {
@@ -69,7 +69,7 @@ spec:
 					}
 				}
 			}
-		}
+		} */
 		/* stage ("Deploy") {
               steps {
                   container ('gradle') {
