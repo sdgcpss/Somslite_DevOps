@@ -131,15 +131,12 @@ spec:
             }
                    
 	       
-//println ("branch_name:"+ propfile['feature_deploy']) 
+ 
                    } 
-		   
+		 			
+		  }
+		  }
 		  
-					
-        
-		  }
-		  }
-		  }
 	  
           stage ("use env vars") {
               steps {
