@@ -120,8 +120,7 @@ spec:
 					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
 					
 				}
-				else
-				echo "no need"
+				
 				}
 	       
 //println ("branch_name:"+ propfile['feature_deploy']) 
