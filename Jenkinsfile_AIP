@@ -126,7 +126,7 @@ spec:
 //println ("branch_name:"+ propfile['feature_deploy']) 
                    } */
 		   
-		    deploy=`cat project.properties | grep "feature_deploy" | cut -d'=' -f2 | awk  '{print $1}' `
+		   sh  'deploy=`cat project.properties | grep "feature_deploy" | cut -d'=' -f2 | awk  '{print $1}' ` '
                       
                        
                       if test "$deploy" = true
