@@ -116,7 +116,8 @@ spec:
 		   println ("deploy:"+ propfile['feature_deploy'])
                println ("reading properties ...")
 	       
-	       if(propfile['feature_deploy']==true){
+	       if( propfile['feature_deploy'] == true ){
+	       		echo "hi"
 	         withMaven(maven: 'MAVEN-3.6.3') {
 					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
 					
