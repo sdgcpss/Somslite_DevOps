@@ -111,7 +111,7 @@ spec:
 	   stage ("Deploy") {
               steps {
                   container ('gradle') {
-                script {
+                /*script {
                    propfile = readProperties(file: './project.properties')
 		   println ("deploy:"+ propfile['feature_deploy'])
                println ("reading properties ...")
@@ -119,12 +119,25 @@ spec:
 	         withMaven(maven: 'MAVEN-3.6.3') {
 					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
 					
-				}
+				} 
 				
 				}
 	       
 //println ("branch_name:"+ propfile['feature_deploy']) 
-                   }
+                   } */
+		   
+		    deploy=`cat project.properties | grep "feature_deploy" | cut -d'=' -f2 | awk  '{print $1}' `
+                      
+                       
+                      if test "$deploy" = true
+                      then
+                          echo " im deploying"
+			  withMaven(maven: 'MAVEN-3.6.3') {
+					echo 'I am executing build and push the artifact with unique name showing the branch from which it is generated, to Archiva'
+					else 
+                      echo "no need"
+                      fi
+					
         
 		  }
 		  }
