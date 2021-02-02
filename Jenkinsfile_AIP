@@ -118,22 +118,7 @@ spec:
                 }                   
             }
         } 
-                  stage ('Smoke Test') {
-                      parallel {
-                          stage ('Security Test') {
-
-                              steps {
-                             
-                                  echo 'I am running Security Test here'
-                             
-                               
-                                  echo 'I am running Smoke Test here'
-                                  }
-                             
-                            }
-                          }
-                        }
-                        
+                 
                         stage('Smoke Test') {
 			parallel {
 				stage('Security Test') {
