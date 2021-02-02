@@ -73,7 +73,7 @@ spec:
 	       if ( propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release' ) {
 	       		withMaven(maven: 'MAVEN-3.6.3') {
 					echo 'I am pushing the artifact with unique name showing the branch from which it is generated, to Archiva'
-					sh 'mvn -X deploy:deploy-file -Dfile=sample-java-app/target/sample-${env.BUILD_NUMBER}-${env.BRANCH_NAME}.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
+					sh 'mvn -X deploy:deploy-file -Dfile=sample-java-app/target/sample-{env.BUILD_NUMBER}-{env.BRANCH_NAME}.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
 					echo "noooooooooooooooooo"
 				}
 			}
