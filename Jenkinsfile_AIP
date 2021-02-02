@@ -123,15 +123,15 @@ spec:
                           stage ('Security Test') {
 
                               steps {
-                              container ('gradle'){
+                             
                                   echo 'I am running Security Test here'
                               }
-                              }
+                              
                               steps {
-                               container ('gradle'){
+                               
                                   echo 'I am running Smoke Test here'
                                   }
-                             }
+                             
                             }
                           }
                         }
