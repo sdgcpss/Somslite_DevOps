@@ -140,7 +140,7 @@ spec:
 		  
 	 
 	
-	 stage ('smoke_test') {
+	 stage ('Smoke Test') {
     steps {
     echo 'smoke test'
     }
