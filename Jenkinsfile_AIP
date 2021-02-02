@@ -70,7 +70,7 @@ spec:
                println ("reading properties ...")
 	       sh 'build_number=${env.BUILD_NUMBER}'
 	      sh 'branch_name=${env.BRANCH_NAME}'
-	      echo $build_number'
+	      echo $build_number
 	       
 	       if ( propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release' ) {
 	       		withMaven(maven: 'MAVEN-3.6.3') {
