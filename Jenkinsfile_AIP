@@ -123,12 +123,18 @@ spec:
 			parallel {
 				stage('Security Test') {
 					steps {
-                              
-						echo 'I am running Security Test here'
-                              echo 'I am running Smoke Test here'
-					}
+					container ('gradle') {
+							steps {
+							echo 'I am running Security Test here'
+							}
+							steps {
+				      echo 'I am running Smoke Test here'
+						}
 				}
-    
+				   }
+				  }
+				 }
+			   }
        
 }
 }
