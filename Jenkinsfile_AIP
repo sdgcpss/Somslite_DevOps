@@ -68,17 +68,18 @@ spec:
                   propfile = readProperties(file: './project.properties')
 		   println ("deploy:"+ propfile['feature_deploy'])
                println ("reading properties ...")
-	       sh 'build_number=${env.BUILD_NUMBER}'
-	      sh 'branch_name=${env.BRANCH_NAME}'
-	      echo $build_number
+	      // sh 'build_number=${env.BUILD_NUMBER}'
+	      // sh 'branch_name=${env.BRANCH_NAME}'
+	      // echo $build_number
 	       
 	       if ( propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release' ) {
 	       		withMaven(maven: 'MAVEN-3.6.3') {
 					echo 'I am pushing the artifact with unique name showing the branch from which it is generated, to Archiva'
+					echo env.BRANCH_NAME
 					
-					sh 'mv sample-java-app/target/sample-0.0.1-SNAPSHOT.jar sample-java-app/target/sample-$build_number-$branch_name.jar'
+					sh 'mv sample-java-app/target/sample-0.0.1-SNAPSHOT.jar sample-java-app/target/sample-env.BUILD_NUMBER-env.BRANCH_NAME.jar'
 					sh 'ls -lrt sample-java-app/target/'
-					sh 'mvn -X deploy:deploy-file -Dfile=sample-java-app/target/sample-$build_number-$branch_name.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
+					sh 'mvn -X deploy:deploy-file -Dfile=sample-java-app/target/sample-env.BUILD_NUMBER-env.BRANCH_NAME.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
 					echo "noooooooooooooooooo"
 				}
 			}
