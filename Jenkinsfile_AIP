@@ -147,7 +147,7 @@ spec:
 			echo 'I am running Security Test here'
 		    }
                  }
-	    steps{
+	    steps {
 		echo 'I am running Smoke Test here'
 	    }
 	  }
