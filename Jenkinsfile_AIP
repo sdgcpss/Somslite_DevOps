@@ -23,12 +23,13 @@ spec:
   
     stages {
 			
-			stage('Unit Test') {
+			stage('Build & Unit Test') {
 				steps {
 					container('gradle') {
 						withMaven(maven: 'MAVEN-3.6.3') {
 							withSonarQubeEnv(installationName: 'Sonarqube') {
 								echo 'I am executing unit test'
+								// sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB OrderReconESB;do gradle --no-daemon -p ${i} clean build;done'
 								sh 'mvn -f sample-java-app/pom.xml clean package'
 							}
 						}
@@ -51,9 +52,7 @@ spec:
 					}
 				}
 				
-                 /* sh "printenv | sort"
-                  echo "BUILD_NUMBER = ${env.BUILD_NUMBER}"
-                  echo "BRANCH_NAME = ${env.BRANCH_NAME}" */
+                
               
 			}
 		}
@@ -68,13 +67,18 @@ spec:
                   propfile = readProperties(file: './project.properties')
 		   println ("deploy:"+ propfile['feature_deploy'])
                println ("reading properties ...")
-	      // sh 'build_number=${env.BUILD_NUMBER}'
-	      // sh 'branch_name=${env.BRANCH_NAME}'
-	      // echo $build_number
+	      
 	       
 	       if ( propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release' ) {
 	       		withMaven(maven: 'MAVEN-3.6.3') {
 					echo 'I am pushing the artifact with unique name showing the branch from which it is generated, to Archiva'
+					/* echo 'copying the jar and war files from the individual target directorrys and copying it to artifacts directory '
+                                        sh "mkdir -p $WORKSPACE/artifacts"
+                                        sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB   OrderReconESB;do cp -rp ${i}/dist/libs/* $WORKSPACE/artifacts/ ;done' */
+					
+					/* echo 'create a tar file on the Jenkins server'
+                                        sh "cd $WORKSPACE/artifacts/ && tar -cvzf artifact.tar * && md5sum artifact.tar archiveArtifacts artifacts: 'artifacts/*.tar', fingerprint: true */
+					
 					sh 'mv sample-java-app/target/sample-0.0.1-SNAPSHOT.jar sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar'
 					sh 'ls -lrt sample-java-app/target/'
 					sh 'mvn -X deploy:deploy-file -Dbuild.number=${BUILD_NUMBER} -Dfile=sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
