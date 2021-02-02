@@ -140,7 +140,7 @@ spec:
 		  
 	 
 	
-	 stage ('Smoke Test') {
+	 /* stage ('Smoke Test') {
 	 parallel {
 		stage('Security Test') {
 		    steps {
@@ -151,7 +151,7 @@ spec:
 		echo 'I am running Smoke Test here'
 	    }
 	  }
-    }
+    } */
 	
 	
 }
