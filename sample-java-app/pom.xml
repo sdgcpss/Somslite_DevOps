@@ -49,27 +49,7 @@
       			<url>http://35.188.92.10/repository/snapshots/</url>
     		</snapshotRepository>
  	</distributionManagement>
-
-	<plugin>
-            
-          <configuration>
-                <manifest>
-                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                </manifest>
-                <archive>
-                    <manifestEntries>
-                        <Specification-Title>${project.name}</Specification-Title>
-                        <Specification-Version>${project.version}</Specification-Version>
-                        <Implementation-Version>${build.number}</Implementation-Version>
-                    </manifestEntries>
-                </archive>
-            </configuration>
-        </plugin>
-	
-
-
-	
-	<build>
+        <build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
