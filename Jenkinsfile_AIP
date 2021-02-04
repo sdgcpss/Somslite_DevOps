@@ -35,6 +35,22 @@ stages {
 			}
 		}
 	}
+	stage('copy_environment_properties'){
+			       steps {
+			                  container('gradle') {
+			                       /* mkdir properties
+                                                 cp -r SterlingESBAux/properties/dev1 properties/
+                                                 cp -r SterlingESBAux/properties/uat1 properties/
+                                                 cp -r SterlingESBAux/properties/perf1 properties/
+                                                 cp -r SterlingESBAux/properties/perf2 properties/
+                                                 cp -r SterlingESBAux/properties/prod1 properties/
+                                                 cp -r SterlingESBAux/properties/prod2 properties/
+
+                                                 ls -la properties
+                                                      */
+						  }
+				         }
+			}
 	stage('Code Quality') {
 		steps {
 			container('gradle') {
@@ -160,6 +176,9 @@ stages {
 	}    
   }
   post {
+            always {
+		javadoc(javadocDir: '/home/jenkins/agent/workspace/Sandbox/EJB_test/target/site/apidocs', keepAll: true)
+	}
         failure {
             /*mail bcc: '', 
             	 body: "<b>Example</b><br>\n<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", 
