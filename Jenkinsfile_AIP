@@ -177,7 +177,7 @@ stages {
   }
   post {
             always {
-		javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/target/site/apidocs', keepAll: true)
+		javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/SomsLite CI Pipeline/target/site/apidocs', keepAll: true)
 	} 
         failure {
             /*mail bcc: '', 
