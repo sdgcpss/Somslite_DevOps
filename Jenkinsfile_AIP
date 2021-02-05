@@ -176,9 +176,9 @@ stages {
 	}    
   }
   post {
-           /* always {
-		javadoc(javadocDir: '/home/jenkins/agent/workspace/Sandbox/EJB_test/target/site/apidocs', keepAll: true)
-	} */
+            always {
+		javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/target/site/apidocs', keepAll: true)
+	} 
         failure {
             /*mail bcc: '', 
             	 body: "<b>Example</b><br>\n<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", 
