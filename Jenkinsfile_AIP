@@ -51,7 +51,22 @@ stages {
 						  }
 				         }
 			}
-	stage('Code Quality') {
+	stage('check sonar plugin'){
+			       steps {
+			                  container('gradle') {
+			                       /* grep -q "org.sonarqube" build.gradle
+
+                                                if [ $? -gt 0 ]; then
+                                                sed -i '' '/register plug-ins/ {a\
+                                                plugins {id "org.sonarqube" version "3.0"}
+                                                       }' build.gradle
+                                                 Fi
+
+                                                      */
+						  }
+				         }
+			}
+	stage('sonar scan') {
 		steps {
 			container('gradle') {
 				withMaven(maven: 'MAVEN-3.6.3') {
