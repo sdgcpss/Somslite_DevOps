@@ -48,6 +48,8 @@ stages {
 
                                                  ls -la properties
                                                       */
+						  cp -r dev1 properties/
+						  ls -la properties
 						  }
 				         }
 			}
