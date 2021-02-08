@@ -39,7 +39,7 @@ stages {
 			       steps {
 			                  container('gradle') {
 					  script {
-					  withMaven(maven: 'MAVEN-3.6.3') {
+					  
 			                       /* mkdir properties
                                                  cp -r SterlingESBAux/properties/dev1 properties/
                                                  cp -r SterlingESBAux/properties/uat1 properties/
@@ -54,8 +54,8 @@ stages {
 						  // fileOperations([folderCreateOperation('properties')])
 						   // fileOperations([fileCopyOperation('dev1properties')])
 						    mkdir properties
-						  cp -r dev1properties/
-						 }}
+						 // cp -r dev1properties/
+						 }
 						  }
 				         }
 			}
