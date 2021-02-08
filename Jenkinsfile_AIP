@@ -48,7 +48,7 @@ stages {
 
                                                  ls -la properties
                                                       */
-						   mkdir properties
+						   fileOperations([folderCreateOperation('properties')])
 						  //cp dev1 properties
 						  // ls -la properties
 						  }
