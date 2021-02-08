@@ -13,7 +13,7 @@ labels:
 spec:
   containers:
   - name: gradle
-    image: gradle:3.5-ibmjava
+    image: gradle:3.5-jdk8-alpine
     command:
     - cat
     tty: true
