@@ -49,8 +49,8 @@ stages {
                                                  ls -la properties
                                                       */
 						   fileOperations([folderCreateOperation('properties')])
-						  //cp dev1 properties
-						  // ls -la properties
+						 cp dev1 properties
+						  ls -la properties
 						  }
 				         }
 			}
