@@ -48,7 +48,7 @@ stages {
                                                  cp -r SterlingESBAux/properties/prod1 properties/
                                                  cp -r SterlingESBAux/properties/prod2 properties/
 
-                                                 ls -la properties
+                                                // ls -la properties
                                                       */
 						  // fileOperations([folderCreateOperation('properties')])
 						   // fileOperations([fileCopyOperation('dev1properties')])
