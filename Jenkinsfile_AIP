@@ -49,7 +49,7 @@ stages {
                                                   ls -la properties
                                                       */
 						   fileOperations([folderCreateOperation('properties')])
-						   fileOperations([fileCopyOperation('dev1properties')])
+						  // fileOperations([fileCopyOperation('dev1properties')])
 						  // mkdir properties
 						 // cp -r dev1properties/
 						 
