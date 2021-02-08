@@ -49,7 +49,7 @@ stages {
                                                  ls -la properties
                                                       */
 						   mkdir properties
-						  cp -r dev1 properties/
+						  cp dev1 properties
 						  ls -la properties
 						  }
 				         }
