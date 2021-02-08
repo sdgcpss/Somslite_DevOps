@@ -38,6 +38,7 @@ stages {
 	stage('copy_environment_properties'){
 			       steps {
 			                  container('gradle') {
+					  script {
 			                       /* mkdir properties
                                                  cp -r SterlingESBAux/properties/dev1 properties/
                                                  cp -r SterlingESBAux/properties/uat1 properties/
@@ -48,10 +49,11 @@ stages {
 
                                                  ls -la properties
                                                       */
-						   fileOperations([folderCreateOperation('properties')])
-						   fileOperations([fileCopyOperation('dev1properties')])
-						// cp -r  dev1properties
-						 
+						     mkdir properties
+						  // fileOperations([folderCreateOperation('properties')])
+						   // fileOperations([fileCopyOperation('dev1properties')])
+						  cp -r  dev1properties
+						 }
 						  }
 				         }
 			}
