@@ -52,6 +52,7 @@ stages {
 						  // fileOperations([fileCopyOperation('dev1properties')])
 						  // mkdir properties
 						 // cp -r dev1properties/
+						 echo 'coping property files '
 						 
 						 }
 				         }
