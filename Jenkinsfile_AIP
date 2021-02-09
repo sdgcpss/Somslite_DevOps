@@ -13,7 +13,7 @@ labels:
 spec:
   containers:
   - name: imbjava
-    image: ibmcom/ibmjava:8
+    image: ibmcom/ibmjava:8-sdk-alpine
     command:
     - cat
     tty: true
@@ -197,9 +197,10 @@ stages {
 	}    
   }
   post {
-            /* always {
-		javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/SomsLite CI Pipeline/target/site/apidocs', keepAll: true)
-	} */
+            always {
+	    archiveArtifacts artifacts: 'dev1properties'
+		// javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/SomsLite CI Pipeline/target/site/apidocs', keepAll: true)
+	} 
         failure {
             /*mail bcc: '', 
             	 body: "<b>Example</b><br>\n<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", 
