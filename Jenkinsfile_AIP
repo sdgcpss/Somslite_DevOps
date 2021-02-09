@@ -12,8 +12,8 @@ labels:
   component: ci
 spec:
   containers:
-  - name: gradle
-    image: gradle:3.5-jdk8-alpine
+  - name: imbjava
+    image: ibmcom/ibmjava:jre-alpine
     command:
     - cat
     tty: true
@@ -24,7 +24,7 @@ spec:
 stages {
 	stage('Build & Unit Test') {
 		steps {
-			container('gradle') {
+			container('imbjava') {
 				withMaven(maven: 'MAVEN-3.6.3') {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing unit test'
@@ -37,7 +37,7 @@ stages {
 	}
 	stage('copy_environment_properties'){
 			       steps {
-			                  container('gradle') {
+			                  container('imbjava') {
 			                       /* mkdir properties
                                                  cp -r SterlingESBAux/properties/dev1 properties/
                                                  cp -r SterlingESBAux/properties/uat1 properties/
@@ -58,7 +58,7 @@ stages {
 			}
 	stage('check sonar plugin'){
 			       steps {
-			                  container('gradle') {
+			                  container('imbjava') {
 			                       /* grep -q "org.sonarqube" build.gradle
 
                                                 if [ $? -gt 0 ]; then
@@ -73,7 +73,7 @@ stages {
 			}
 	stage('sonar scan') {
 		steps {
-			container('gradle') {
+			container('imbjava') {
 				withMaven(maven: 'MAVEN-3.6.3') {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing code quality using sonarqube'
@@ -89,7 +89,7 @@ stages {
 	}
 	stage("Publish Package") {
 		steps {
-			container('gradle') {
+			container('imbjava') {
 				script {
 					propfile = readProperties(file: './project.properties')
 					println("deploy:" + propfile['feature_deploy'])
@@ -114,7 +114,7 @@ stages {
 	}
 	stage("Deploy") {
 		steps {
-			container('gradle') {
+			container('imbjava') {
 				script {
 					propfile = readProperties(file: './project.properties')
 					println("deploy:" + propfile['feature_deploy'])
