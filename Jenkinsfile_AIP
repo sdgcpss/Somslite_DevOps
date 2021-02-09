@@ -74,7 +74,7 @@ stages {
 			}
 	stage('sonar scan') {
 		steps {
-			container('imbjava') {
+			//container('imbjava') {
 				withMaven(maven: 'MAVEN-3.6.3') {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing code quality using sonarqube'
@@ -87,7 +87,7 @@ stages {
 				}
 			}
 		}
-	}
+	// }
 	stage("Publish Package") {
 		steps {
 			container('imbjava') {
