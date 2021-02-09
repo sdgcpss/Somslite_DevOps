@@ -176,7 +176,7 @@ stages {
 				# abort=$(curl -X PUT -H "Authorization: Bearer $token" -d "" -H "id: ${bamboo.RequestID}" ${bamboo.uri}/Request/${bamboo.RequestID}/abort/)
 				guid=$(curl -X PUT -H "Authorization: Bearer $token" -d "" -H "parameters: {TestEnv}{${bamboo.stage_name}}" -H "id: ${bamboo.RequestID}" ${bamboo.uri}/ExecuteRequest/ | tr -d \")
 				echo "The GUID is: $guid"
-				status=$(curl -X GET -H "Authorization: Bearer $token" -d "" -H "APIRequestID: $guid" ${bamboo.uri}/ExecutionStatus/ | awk -F':' '{print $2}' | tr -d \" | tr -d \})
+				// status=$(curl -X GET -H "Authorization: Bearer $token" -d "" -H "APIRequestID: $guid" ${bamboo.uri}/ExecutionStatus/ | awk -F':' '{print $2}' | tr -d \" | tr -d \})
 				echo "The status is: $status"
 				while [[ $status != *"Completed"* ]]
 				do
