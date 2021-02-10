@@ -37,7 +37,7 @@ stages {
 	}
 	stage('copy_environment_properties'){
 			       steps {
-			                  container('imbjava') {
+			                 // container('imbjava') {
 			                       /* mkdir properties
                                                  cp -r SterlingESBAux/properties/dev1 properties/
                                                  cp -r SterlingESBAux/properties/uat1 properties/
@@ -59,7 +59,7 @@ stages {
 						 cp -r SterlingESBAux/properties/dev1 properties/
 						 echo 'coping property files '
 						 
-						 }
+						// }
 				         }
 			}
 	stage('check sonar plugin'){
