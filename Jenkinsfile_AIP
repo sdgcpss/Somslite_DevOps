@@ -48,10 +48,15 @@ stages {
 
                                                   ls -la properties
                                                       */
-						   fileOperations([folderCreateOperation('properties')])
+						  // fileOperations([folderCreateOperation('properties')])
 						  // fileOperations([fileCopyOperation('dev1properties')])
 						  // mkdir properties
 						 // cp -r dev1properties/
+						 
+						  sh '''
+                                                 #!/bin/bash
+						 mkdir properties
+						 cp -r SterlingESBAux/properties/dev1 properties/
 						 echo 'coping property files '
 						 
 						 }
