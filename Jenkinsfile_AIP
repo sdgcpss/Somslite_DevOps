@@ -13,7 +13,7 @@ labels:
 spec:
   containers:
   - name: imbjava
-    image: ibmcom/ibmjava:8-sdk-alpine
+    image: ibmcom/ibmjava:sdk
     command:
     - cat
     tty: true
