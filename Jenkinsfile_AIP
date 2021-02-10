@@ -37,7 +37,7 @@ stages {
 	}
 	stage('copy_environment_properties'){
 			       steps {
-			                 // container('imbjava') {
+			                  container('imbjava') {
 			                       /* mkdir properties
                                                  cp -r SterlingESBAux/properties/dev1 properties/
                                                  cp -r SterlingESBAux/properties/uat1 properties/
@@ -53,13 +53,13 @@ stages {
 						  // mkdir properties
 						 // cp -r dev1properties/
 						 
-						  sh '''
+						/*  sh '''
                                                  #!/bin/bash
 						 mkdir properties
-						 cp -r SterlingESBAux/properties/dev1 properties/
+						 cp -r SterlingESBAux/properties/dev1 properties/ */
 						 echo 'coping property files '
 						 
-						// }
+						 }
 				         }
 			}
 	stage('check sonar plugin'){
@@ -203,7 +203,7 @@ stages {
   }
   post {
             always {
-	    archiveArtifacts artifacts: 'SterlingESBAux/properties/*'
+	        archiveArtifacts artifacts: 'SterlingESBAux/properties/dev/*'
 		// javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/SomsLite CI Pipeline/target/site/apidocs', keepAll: true)
 	} 
         failure {
