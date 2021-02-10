@@ -203,7 +203,8 @@ stages {
   }
   post {
             always {
-	        archiveArtifacts artifacts: 'SterlingESBAux/properties/dev/*'
+	        archiveArtifacts artifacts: 'dev1properties'
+	       // archiveArtifacts artifacts: 'SterlingESBAux/properties/dev/*'
 		// javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/SomsLite CI Pipeline/target/site/apidocs', keepAll: true)
 	} 
         failure {
