@@ -12,7 +12,7 @@ labels:
   component: ci
 spec:
   containers:
-  - name: imbjava
+  - name: ibmjava
     image: maven:3.6.3-ibmjava
     command:
     - cat
@@ -24,100 +24,59 @@ spec:
 stages {
 	stage('Build & Unit Test') {
 		steps {
-			container('imbjava') {
+			container('ibmjava') {
 				withMaven(maven: 'MAVEN-3.6.3') {
-					withSonarQubeEnv(installationName: 'Sonarqube') {
-						echo 'I am executing unit test'
-						// sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB OrderReconESB;do gradle --no-daemon -p ${i} clean build;done'
+						echo 'I am executing build and unit test'
+						echo 'use the command below when we switch to somslite source'
+						// sh 'for i in somslitebuild;do gradle --no-daemon -p ${i} clean build;done'
 						echo 'Add gradle clean and build for EJB and comment this step' 
 						sh 'mvn -f sample-java-app/pom.xml clean package'
-					}
+
 				}
 			}
 		}
 	}
-	stage('copy_environment_properties'){
-			       steps {
-			                  container('imbjava') {
-			                       /* mkdir properties
-                                                 cp -r SterlingESBAux/properties/dev1 properties/
-                                                 cp -r SterlingESBAux/properties/uat1 properties/
-                                                 cp -r SterlingESBAux/properties/perf1 properties/
-                                                 cp -r SterlingESBAux/properties/perf2 properties/
-                                                 cp -r SterlingESBAux/properties/prod1 properties/
-                                                 cp -r SterlingESBAux/properties/prod2 properties/
-
-                                                  ls -la properties
-                                                      */
-						  // fileOperations([folderCreateOperation('properties')])
-						  // fileOperations([fileCopyOperation('dev1properties')])
-						  // mkdir properties
-						 // cp -r dev1properties/
-						 
-						/*  sh '''
-                                                 #!/bin/bash
-						 mkdir properties
-						 cp -r SterlingESBAux/properties/dev1 properties/ */
-						 
-						 archiveArtifacts artifacts: 'dev1properties'
-						 echo 'coping property files '
-						 
-						 }
-				         }
-			}
-	stage('check sonar plugin'){
-			       steps {
-			                  container('imbjava') {
-			                       /* grep -q "org.sonarqube" build.gradle
-
-                                                if [ $? -gt 0 ]; then
-                                                sed -i '' '/register plug-ins/ {a\
-                                                plugins {id "org.sonarqube" version "3.0"}
-                                                       }' build.gradle
-                                                 Fi
-
-                                                      */
-						  }
-				         }
-			}
-	stage('sonar scan') {
+         stage('Code Quality') {
 		steps {
-			container('imbjava') {
+			container('gradle') {
 				withMaven(maven: 'MAVEN-3.6.3') {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing code quality using sonarqube'
-						echo 'Change the below command for sonar using the syntax from rakshitas jenkinsfile'
-						
-						sh 'mvn -f sample-java-app/pom.xml sonar:sonar'
-					}
-					/* sleep(60)
-					timeout(time: 1, unit: 'MINUTES') {
-					waitForQualityGate abortPipeline: true
-					} */
+						echo "update the line below when we switch to actual somslite repo"
+						// sh 'gradle Sonarqube'
+						echo 'remove the line below when we switch to actual somslite repo"
+						sh 'mvn -f sample-java-app/pom.xml -Dsonar.projectName=SOMSLITE_${BRANCH_NAME} -Dsonar.projectKey=SOMSLITE_sample sonar:sonar'
+				}
+			sleep(60)
+			timeout(time: 1, unit: 'MINUTES') {
+				waitForQualityGate abortPipeline: true
+			}
 				}
 			}
-		}
-	}
+				}
+}
+	
 	stage("Publish Package") {
 		steps {
-			container('imbjava') {
+			container('ibmjava') {
 				script {
 					propfile = readProperties(file: './project.properties')
 					println("deploy:" + propfile['feature_deploy'])
-					println("reading properties ...")
 					if (propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release') {
 						withMaven(maven: 'MAVEN-3.6.3') {
 							echo 'I am pushing the artifact with unique name showing the branch from which it is generated, to Archiva'
-							echo 'Replace the next 4 lines to reflect the EJB artifact and push it to archiva'
+							echo 'Replace the next 4 lines to reflect the Somslite artifact and push it to archiva'
+							echo 'use the 4 lines below when we switch to actual somslite repo"
 							/* echo 'copying the jar and war files from the individual target directorrys and copying it to artifacts directory '
 							sh "mkdir -p $WORKSPACE/artifacts"
-							sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB   OrderReconESB;do cp -rp ${i}/dist/libs/* $WORKSPACE/artifacts/ ;done' */
-							/* echo 'create a tar file on the Jenkins server'
-							sh "cd $WORKSPACE/artifacts/ && tar -cvzf artifact.tar * && md5sum artifact.tar archiveArtifacts artifacts: 'artifacts/*.tar', fingerprint: true */
+							sh 'for i in somslitebuild;do cp -rp ${i}/dist/libs/* $WORKSPACE/artifacts/ ;done' 
+							echo 'create a tar file on the Jenkins server'
+							sh "cd $WORKSPACE/artifacts/ && tar -cvzf artifact.tar * && md5sum artifact.tar archiveArtifacts artifacts: 'artifacts/*.tar', fingerprint: true 
+							*/
+							echo 'remove the 3 lines below when we switch to actual somslite repo"
 							sh 'mv sample-java-app/target/sample-0.0.1-SNAPSHOT.jar sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar'
 							sh 'ls -lrt sample-java-app/target/'
 							sh 'mvn -X deploy:deploy-file  -Dfile=sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
-							echo "noooooooooooooooooo"
 						}
 					}
 				}
@@ -126,11 +85,10 @@ stages {
 	}
 	stage("Deploy") {
 		steps {
-			container('imbjava') {
+			container('ibmjava') {
 				script {
 					propfile = readProperties(file: './project.properties')
 					println("deploy:" + propfile['feature_deploy'])
-					println("reading properties ...")
 					if (propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release') {
 						withMaven(maven: 'MAVEN-3.6.3') {
 							echo 'I am deploying the artifact into the target environment'
@@ -211,8 +169,9 @@ stages {
   }
   post {
             always {
-	        echo ' alway do this '
-	       // archiveArtifacts artifacts: 'SterlingESBAux/properties/dev/*'
+	        echo 'adding properties file in artifect'
+		 archiveArtifacts artifacts: 'dev1properties'
+	        // archiveArtifacts artifacts: 'SterlingESBAux/properties/dev/*'
 		// javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/SomsLite CI Pipeline/target/site/apidocs', keepAll: true)
 	} 
         failure {
