@@ -29,6 +29,7 @@ stages {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing unit test'
 						// sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB OrderReconESB;do gradle --no-daemon -p ${i} clean build;done'
+						echo 'Add gradle clean and build for EJB and comment this step' 
 						sh 'mvn -f sample-java-app/pom.xml clean package'
 					}
 				}
@@ -57,6 +58,8 @@ stages {
                                                  #!/bin/bash
 						 mkdir properties
 						 cp -r SterlingESBAux/properties/dev1 properties/ */
+						 
+						 archiveArtifacts artifacts: 'dev1properties'
 						 echo 'coping property files '
 						 
 						 }
@@ -83,7 +86,8 @@ stages {
 				withMaven(maven: 'MAVEN-3.6.3') {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing code quality using sonarqube'
-						echo 'change below command by rakshita/bhumika command'
+						echo 'Change the below command for sonar using the syntax from rakshitas jenkinsfile'
+						
 						sh 'mvn -f sample-java-app/pom.xml sonar:sonar'
 					}
 					/* sleep(60)
@@ -104,6 +108,7 @@ stages {
 					if (propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release') {
 						withMaven(maven: 'MAVEN-3.6.3') {
 							echo 'I am pushing the artifact with unique name showing the branch from which it is generated, to Archiva'
+							echo 'Replace the next 4 lines to reflect the EJB artifact and push it to archiva'
 							/* echo 'copying the jar and war files from the individual target directorrys and copying it to artifacts directory '
 							sh "mkdir -p $WORKSPACE/artifacts"
 							sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB   OrderReconESB;do cp -rp ${i}/dist/libs/* $WORKSPACE/artifacts/ ;done' */
@@ -129,6 +134,8 @@ stages {
 					if (propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release') {
 						withMaven(maven: 'MAVEN-3.6.3') {
 							echo 'I am deploying the artifact into the target environment'
+							echo 'Replace all the lines below for EJB and add the parameters to propfile and make refrences below'
+							echo 'Accom logic for multiple env and mult servers in each env based on the branch name'
 							echo 'shutting down the tomcat ESB server'
 							/* sh 'ssh $DEPLOYMENT_USER@$DEPOYMENT_SERVER "$ESB_BIN_PATH stop || sleep 20"'
 							echo 'force stop any remaining mule process'
@@ -204,7 +211,7 @@ stages {
   }
   post {
             always {
-	        archiveArtifacts artifacts: 'dev1properties'
+	        echo ' alway do this '
 	       // archiveArtifacts artifacts: 'SterlingESBAux/properties/dev/*'
 		// javadoc(javadocDir: '/home/jenkins/agent/workspace/DevOps/Somslite/SomsLite CI Pipeline/target/site/apidocs', keepAll: true)
 	} 
