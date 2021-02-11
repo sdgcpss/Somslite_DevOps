@@ -25,7 +25,7 @@ stages {
 	stage('Build & Unit Test') {
 		steps {
 			container('imbjava') {
-				withMaven(maven: 'MAVEN-3.6.3') {
+				withMaven(maven: 'MAVEN-3.8.0') {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing unit test'
 						// sh 'for i in ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB OrderReconESB;do gradle --no-daemon -p ${i} clean build;done'
@@ -83,7 +83,7 @@ stages {
 	stage('sonar scan') {
 		steps {
 			container('imbjava') {
-				withMaven(maven: 'MAVEN-3.6.3') {
+				withMaven(maven: 'MAVEN-3.8.0') {
 					withSonarQubeEnv(installationName: 'Sonarqube') {
 						echo 'I am executing code quality using sonarqube'
 						echo 'Change the below command for sonar using the syntax from rakshitas jenkinsfile'
@@ -132,7 +132,7 @@ stages {
 					println("deploy:" + propfile['feature_deploy'])
 					println("reading properties ...")
 					if (propfile['feature_deploy'] == "true" || env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'release') {
-						withMaven(maven: 'MAVEN-3.6.3') {
+						withMaven(maven: 'MAVEN-3.8.0') {
 							echo 'I am deploying the artifact into the target environment'
 							echo 'Replace all the lines below for EJB and add the parameters to propfile and make refrences below'
 							echo 'Accom logic for multiple env and mult servers in each env based on the branch name'
