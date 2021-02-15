@@ -46,13 +46,14 @@ spec:
 		stage('Build & Unit Test') {
 			steps {
 				container('gradle') {
-					withMaven(maven: 'MAVEN-3.6.3') {
-						echo 'I am executing build and unit test'
-						echo 'use the command below when we switch to somslite source'
-						// sh 'for i in somslitebuild;do gradle --no-daemon -p ${i} clean build;done'
-						echo 'Add gradle clean and build for Somslite and comment this step' 
-						sh 'mvn -f sample-java-app/pom.xml clean package'
-						propfile = readProperties(file: './project.properties')
+					script {
+						withMaven(maven: 'MAVEN-3.6.3') {
+							echo 'I am executing build and unit test'
+							echo 'use the command below when we switch to somslite source'
+							// sh 'for i in somslitebuild;do gradle --no-daemon -p ${i} clean build;done'
+							echo 'Add gradle clean and build for Somslite and comment this step' 
+							sh 'mvn -f sample-java-app/pom.xml clean package'
+							propfile = readProperties(file: './project.properties')
 							if (propfile['javadoc'] == "true") {
 								sh 'mvn javadoc:aggregate'
 							}
@@ -63,11 +64,12 @@ spec:
 									sourcePattern: '**/*.java',
 									exclusionPattern: '**/test*'
 								)
+							}
+						}	
 					}
 				}
 			}
 		}
-	}
          stage('Code Quality') {
 		steps {
 			container('gradle') {
