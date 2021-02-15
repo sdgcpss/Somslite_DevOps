@@ -23,11 +23,11 @@ spec:
 	}
 	environment {
 		GRADLE_PATH = '/opt/gradle/gradle-3.5.1/bin'
-		GRADLE_TASK = 'ESBAuditClient ESBAuditLog ESBErrorTranslator TaxESB FraudESB FulfillmentESB PaymentESB ESBRadial ESBAutomatedQueueRetry AlertESB OrderReconESB'
+		GRADLE_TASK = 'somslitebuild'
 		DEPLOYMENT_ARCHIVE_DIR='/home/muleadmin/stage/archive'
 		DEPLOYMENT_STAGE_DIR='/home/muleadmin/stage'
 		DEPLOYMENT_DIR='/opt/mule/latest/webapps'
-		WAR_FILES='AlertESB.war FraudESB.war TaxESB.war PaymentESB.war FulfillmentESB.war ESBAuditLog.war ESBAutomatedQueueRetry.war OrderReconESB.war'
+		WAR_FILES='somslite.war'
 		ESB_BIN_PATH='/opt/mule/bin/esb_service'
 		ESB_WAR_FOLDERS='PaymentESB ESBAuditLog OrderReconESB FraudESB TaxESB FulfillmentESB AlertESB ESBAutomatedQueueRetry'
 		REQUESTID='779'
@@ -111,7 +111,7 @@ spec:
 							*/
 							echo 'remove the 3 lines below when we switch to actual somslite repo'
 							sh 'mv sample-java-app/target/sample-0.0.1-SNAPSHOT.jar sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar'
-							sh 'ls -lrt sample-java-app/target/'
+							buildsh 'ls -lrt sample-java-app/target/'
 							sh 'mvn -X deploy:deploy-file  -Dfile=sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
 						}
 					}
