@@ -52,7 +52,19 @@ spec:
 						// sh 'for i in somslitebuild;do gradle --no-daemon -p ${i} clean build;done'
 						echo 'Add gradle clean and build for Somslite and comment this step' 
 						sh 'mvn -f sample-java-app/pom.xml clean package'
-
+						propfile = readProperties(file: './project.properties')
+							if (propfile['javadoc'] == "true") {
+								sh 'mvn javadoc:aggregate'
+							}
+							if (propfile['jacoco'] == "true") {
+								jacoco( 
+									execPattern: '**/*.exec',
+									classPattern: '**/*.class',
+									sourcePattern: '**/*.java',
+									exclusionPattern: '**/test*'
+								)
+							}
+					}
 				}
 			}
 		}
