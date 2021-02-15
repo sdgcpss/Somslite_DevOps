@@ -68,7 +68,7 @@ spec:
 						// sh 'gradle Sonarqube'
 						echo 'remove the line below when we switch to actual somslite repo"
 						sh 'mvn -f sample-java-app/pom.xml -Dsonar.projectName=SOMSLITE_${BRANCH_NAME} -Dsonar.projectKey=SOMSLITE_sample sonar:sonar'
-				      							}
+				      		}
 						sleep(60)
 						timeout(time: 1, unit: 'MINUTES') 
 						{
