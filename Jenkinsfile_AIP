@@ -111,7 +111,7 @@ spec:
 							*/
 							echo 'remove the 3 lines below when we switch to actual somslite repo'
 							sh 'mv sample-java-app/target/sample-0.0.1-SNAPSHOT.jar sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar'
-							buildsh 'ls -lrt sample-java-app/target/'
+							build.sh 'ls -lrt sample-java-app/target/'
 							sh 'mvn -X deploy:deploy-file  -Dfile=sample-java-app/target/sample-build_${BUILD_NUMBER}-branch_${BRANCH_NAME}.jar -DpomFile=sample-java-app/pom.xml -DrepositoryId=snapshots -Durl=https://archiva.sgn.devops.accentureanalytics.com/repository/snapshots/'
 						}
 					}
