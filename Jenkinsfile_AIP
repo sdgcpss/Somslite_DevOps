@@ -64,9 +64,9 @@ spec:
 					withSonarQubeEnv(installationName: 'Sonarqube') 
 									{
 						echo 'I am executing code quality using sonarqube'
-						echo "update the line below when we switch to actual somslite repo"
+						echo 'update the line below when we switch to actual somslite repo'
 						// sh 'gradle Sonarqube'
-						echo 'remove the line below when we switch to actual somslite repo"
+						echo 'remove the line below when we switch to actual somslite repo'
 						sh 'mvn -f sample-java-app/pom.xml -Dsonar.projectName=SOMSLITE_${BRANCH_NAME} -Dsonar.projectKey=SOMSLITE_sample sonar:sonar'
 				      		}
 						sleep(60)
