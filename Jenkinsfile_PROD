@@ -1,102 +1,73 @@
-def propfile
-
 pipeline {
-	agent {
-    		kubernetes {
-			label 'SpringBootRestApp'
-			defaultContainer 'jnlp'
-			yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-labels:
-  component: ci
-spec:
-  containers:
-  - name: gradle
-    image: gradle:3.5-jdk8-alpine
-    command:
-    - cat
-    tty: true
-"""
-		}
-	}
-	environment {
-		GRADLE_PATH = '/opt/gradle/gradle-3.5.1/bin'
-		GRADLE_TASK = 'somslitebuild'
-		DEPLOYMENT_ARCHIVE_DIR='/home/jboss/stage/archive'
-		DEPLOYMENT_STAGE_DIR='/home/jboss/stage'
-		DEPLOYMENT_DIR='/opt/jboss/deploy'
-		WAR_FILES='SterlingESB.war'
-		ESB_BIN_PATH='/opt/mule/bin/esb_service'
-		ESB_WAR_FOLDERS='PaymentESB ESBAuditLog OrderReconESB FraudESB TaxESB FulfillmentESB AlertESB ESBAutomatedQueueRetry'
-		REQUESTID='779'
-		STAGE_NAME='dev3'
-		WORKSOFT_URI='http://pwwsftapp01/executionmanager/api'
-		USERNAME='devopsengineering@signetjewelers.com'
-		USERNAME_FEATURE_DEPLOY='jboss'
-		HOSTS_FEATURE_DEPLOY="10.6.66.153"
-		USERNAME_DEV_DEPLOY='jboss'
-		HOSTS_DEV_DEPLOY="10.6.66.154, 10.6.66.155"
-		USERNAME_RELEASE='jboss'
-		HOSTS_RELEASE_DEPLOY="10.6.66.156, 10.6.66.157"
-	}
-  
-	stages {
-		stage('Build & Unit Test') {
-			steps {
-				container('gradle') {
-					script {
-						withMaven(maven: 'MAVEN-3.6.3') {
-							echo 'I am executing build and unit test'
-							echo 'use the command below when we switch to somslite source'
-							// sh 'for i in somslitebuild;do gradle --no-daemon -p ${i} clean build;done'
-							echo 'Add gradle clean and build for Somslite and comment this step' 
-							sh 'mvn -f sample-java-app/pom.xml clean package'
-							propfile = readProperties(file: './project.properties')
-							if (propfile['javadoc'] == "true") {
-								sh 'mvn javadoc:aggregate'
-							}
-							if (propfile['jacoco'] == "true") {
-								jacoco( 
-									execPattern: '**/*.exec',
-									classPattern: '**/*.class',
-									sourcePattern: '**/*.java',
-									exclusionPattern: '**/test*'
-								)
-							}
-						}	
-					}
-				}
-			}
-		}
-cat << EOF > $deployment.cli.file
-if (outcome != success) of /deployment=$war.file:read-resource
-  echo ###
-  echo ### Deploy $war.file to somslite-cluster
-  echo ###
-  deploy $war.deploy.dir/$war.file --server-groups=$server.groups
-else
-  echo ###
-  echo ### Module $war.file already installed, deploying with rolling update
-  echo ###
-  deploy $war.deploy.dir/$war.file --name=$war.file --runtime-name=$war.file --headers={rollout $server.groups(rolling-to-servers=true)} --force
-end-if
+agent any
+stages {
+    stage('Gradle Build') {
+         steps{
+          bat '''
+            cd SomsLite
+            gradle somslitebuild build'''
+         
+             }
+          }
+       }
+   }
+    stage('Copy Environment Property') {
+         steps{
+         bat '''
+            
+			Xcopy  SterlingESBAux/properties/dev1 properties/E/H/C/I
+			Xcopy  SterlingESBAux/properties/uat1 properties/E/H/C/I
+			Xcopy  SterlingESBAux/properties/perf1 properties/E/H/C/I
+			Xcopy  SterlingESBAux/properties/perf2 properties/E/H/C/I
+			Xcopy  SterlingESBAux/properties/prod1 properties/E/H/C/I
+			Xcopy  SterlingESBAux/properties/prod2 properties/E/H/C/I
 
-echo
-echo ###
-echo ### Restarting servers
-echo ###
+			DIR properties '''
+           }
+  		 } 
 
-echo
-echo ### Restarting somslite-server01
-if (outcome != success) of /host=node1/server-config=somslite-server01:restart
-  echo ### Server somslite-server01 restart failed
-  echo
-else
-  echo ### Server somslite-server01 restarted
-  echo
-end-if
+stage('Deployment ') {
+         steps{
+		 
+			cat << EOF > $deployment.cli.file
+			if (outcome != success) of /deployment=$war.file:read-resource
+			echo ###
+			echo ### Deploy $war.file to somslite-cluster
+			echo ###
+			 deploy $war.deploy.dir/$war.file --server-groups=$server.groups
+			else
+			 echo ###
+			echo ### Module $war.file already installed, deploying with rolling update
+			echo ###
+			deploy $war.deploy.dir/$war.file --name=$war.file --runtime-name=$war.file --headers={rollout $server.groups(rolling-to-servers=true)} --force
+			end-if
 
-EOF
+			echo
+			echo ###
+			echo ### Restarting servers
+			echo ###
+
+			echo
+			echo ### Restarting somslite-server01
+			if (outcome != success) of /host=node1/server-config=somslite-server01:restart
+			 echo ### Server somslite-server01 restart failed
+			  echo
+			else
+			echo ### Server somslite-server01 restarted
+			echo
+			end-if
+
+			EOF
+			 echo 'push property into server'
+			 mkdir -p $WORKSPACE/artifacts
+			cp -R  C:/Windows/System32/config/systemprofile/AppData/Local/Jenkins/.jenkins/workspace/SomsLite-DevOps/SomsLite_Build/artifacts/* $WORKSPACE/artifacts/
+
+			'scp -rp $WORKSPACE/artifacts/* $target.user@$target.host:$war.deploy.dir/'
+			'scp -rp $WORKSPACE/artifacts/properties/dev1/config-mule.properties $target.user@$target.host:$property1.deploy.dir/'
+			'scp -rp $WORKSPACE/artifacts/properties/dev1/log4j.properties $target.user@$target.host:$property1.deploy.dir/'
+			'scp -rp $WORKSPACE/artifacts/properties/dev1/config.properties $target.user@$target.host:$property2.deploy.dir/'
+			'scp -rp $WORKSPACE/$deployment.cli.file $target.user@$target.host:$war.deploy.dir/'
+			echo 'deployment last steps'
+			'$cli.script --connect --controller=$target.host:$target.port --timeout=20000 --file=$war.deploy.dir/$deployment.cli.file --user="$jbosscli.offline.user" --password="$jbosscli.offline.password"'
+
 
