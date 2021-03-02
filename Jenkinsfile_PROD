@@ -70,4 +70,5 @@ stage('Deployment ') {
 			echo 'deployment last steps'
 			'$cli.script --connect --controller=$target.host:$target.port --timeout=20000 --file=$war.deploy.dir/$deployment.cli.file --user="$jbosscli.offline.user" --password="$jbosscli.offline.password"'
 
-
+}
+}
