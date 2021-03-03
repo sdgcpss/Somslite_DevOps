@@ -21,11 +21,11 @@ spec:
 		}
 	}
 	stages {
-		stage('Build & Unit Test') {
+		stage('Build') {
 			steps {
 				script {
 					propfile = readProperties(file: './project.properties')
-					echo propfile['USERNAME']
+					echo propfile['target_host']
 				}
 			}
 		}
