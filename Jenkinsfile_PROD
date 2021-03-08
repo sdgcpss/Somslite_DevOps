@@ -3,8 +3,7 @@ agent any
 stages {
     stage('Build') {
          steps{
-                       echo 'Building'
-			cd SomsLite
+                        cd SomsLite
 			gradle --no-daemon somslitebuild
 			pwd
 			cd ..
@@ -32,6 +31,7 @@ stages {
           }
 stage('Deploy') {
          steps{
+			//----------DevOps_SomsLite_Deploy Script 1----------
 			cat << EOF > $deployment_cli_file
 			if (outcome != success) of /deployment=$war_file:read-resource
 			echo ###
@@ -62,7 +62,8 @@ stage('Deploy') {
 
 			EOF
 		       echo '*******************uploading property file on jboss server********************************************'
-		 	mkdir -p $WORKSPACE/artifacts
+		 	//  ----------DevOps_SomsLite_Deploy Script 2----------
+			mkdir -p $WORKSPACE/artifacts
 			cp -R /C/windows/system32/config/systemprofile/AppData/Local/Jenkins/.jenkins/workspace/DevOps_SomsLite/DevOps_SomsLite_release-2021_3.2/artifacts/* $WORKSPACE/artifacts/
 			cd $WORKSPACE/artifacts/properties/
 			mv dev_app_1_config-mule.properties config-mule.properties
@@ -75,5 +76,6 @@ stage('Deploy') {
 			scp -i /c/Users/ernesto.alvarez/.ssh/id_rsa_jenkins -o StrictHostKeyChecking=no -rp $WORKSPACE/$deployment_cli_file $target_user@997725-DEV-EPIC-APP-01.signetomni.com:$war_deploy_dir
 			
 			echo '*****************************************deploying***************************************************'
+			----------DevOps_SomsLite_Deploy Script 3----------
 			ssh -i /c/Users/ernesto.alvarez/.ssh/id_rsa_jenkins -o StrictHostKeyChecking=no $target_user@997725-DEV-EPIC-APP-01.signetomni.com "$cli_script --connect --controller=997725-DEV-EPIC-APP-01.signetomni.com:$target_port --timeout=20000 --file=$war_deploy_dir/$deployment_cli_file --user=$jbosscli_offline_user --password='98&OpUw2ZgBTE*R2'"
 			
