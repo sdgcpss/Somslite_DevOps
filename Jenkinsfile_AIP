@@ -106,16 +106,16 @@ spec:
 					script {
 							withMaven(maven: 'MAVEN-3.6.3') {
 								if (propfile['feature_deploy'] == "true" ) {
-									USERNAME=env.USERNAME_FEATURE_DEPLOY
-									HOSTS=env.HOSTS_FEATURE_DEPLOY
+									USERNAME=propfile['USERNAME_FEATURE_DEPLOY']
+									HOSTS=propfile['HOSTS_FEATURE_DEPLOY']
 								}
 								if (env.BRANCH_NAME == 'dev' ) {
-									USERNAME=env.USERNAME_DEV_DEPLOY
-									HOSTS=env.HOSTS_DEV_DEPLOY
+									USERNAME=propfile['USERNAME_DEV_DEPLOY']
+									HOSTS=propfile['HOSTS_DEV_DEPLOY']
 								}
 								if (env.BRANCH_NAME == 'release') {
-									USERNAME=env.USERNAME_RELEASE_DEPLOY
-									HOSTS=env.HOSTS_RELEASE_DEPLOY
+									USERNAME=propfile['USERNAME_RELEASE_DEPLOY']
+									HOSTS=propfile['HOSTS_RELEASE_DEPLOY']
 								}
 								HOSTS.tokenize(',').each { HOSTNAME ->
 									echo 'I am deploying the artifact into the target environment ${HOSTNAME} as user ${USERNAME}'	
