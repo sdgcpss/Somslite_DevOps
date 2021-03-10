@@ -31,7 +31,7 @@ spec:
 		propfile = readProperties(file: './project.properties')
 		echo  propfile['war_file']				
                 cd SomsLite
-               // gradle --no-daemon somslitebuild
+                gradle --no-daemon somslitebuild
                 pwd
                 cd ..
                 echo 'copy property file'
